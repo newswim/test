@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Calculate the True Cost of Home Ownership - by Ekotrope</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/slider.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/ekotrope.css" />
+    <link rel="stylesheet" href="css/loader.css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script id="floorplan-selector-template" type="text/x-handlebars-template">
+        {{#each floorplans}}
+        <div class="floor-plan-selector">
+            <div class="floor-plan-selector-header">{{name}}</div>
+            <div class="floor-plan-selector-info">
+                <span>{{planArea area}}</span>
+                <span>{{planCost cost}}</span>
+                <span>{{floors}} Stories | {{bedrooms}} Bedrooms</span>
+                <img class="floor-plan-selector-image" src="/s3proxy/tco-plan-images/{{s3ImagePath}}"/>
+                <input type="radio" name="floorplan{{@index}}" value="{{@index}}" id="floorplan{{@index}}"/>
+                <label for="floorplan{{@index}}" class="floor-plan-selector-button"></label>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+</head>
+<body>
+      <header class="inputs">
+          <section>            
+            <h1>Calculate the <span class="title-callout">True Cost</span> of Home Ownership</h1>
+          </section>
+          <div class="branding"><img src="img/Logo.png" /></div>
+      </header>
+      <header class="results">
+          <div id="back-button">
+            <button>Back to inputs</button>
+            <div class="triangle"></div>
+          </div>
+          
+          <section>            
+            <h1>We've calculated your Total Cost of Ownership</h1>
+          </section>
+          <div class="branding"><img src="img/Logo.png" /></div>
+      </header>
+      <div class="modal fade" id="loading-modal">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                  </div>
+                  <div class="modal-body">
+                      <p class="loading-message">Please wait while your results are calculated</p>
+                  </div>
+                  <div class="modal-footer">
+                      <span class="loader">
+                          <i class="dot"></i>
+                          <i class="dot"></i>
+                          <i class="dot"></i>
+                      </span>  
+                  </div>
+              </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    <div id="main">
+      <div id="inputs-content" class="content-wrapper">
+        <form>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-6">
+                    
+                        <!-- New Home -->
+                        
+                        <div class="box" id="new-homes">
+                            <div id="tag-one" class="box-tag"><div><h2>New Home</h2></div></div>
+                            <p>Select the new home you're interested in</p>
+                            <div class="input-content">
+                                <fieldset id="floor-plan-fieldset">
+                                    <div id="floor-plan-info">
+                                        <span id="floor-plan-title">The Meadowood</span><br/>
+                                        <span id="floor-plan-cost">from $553,990</span><br/>
+                                        <span id="floor-plan-area">SQ. FT - 3301 SQ. FT</span>
+                                    </div>
+
+                                    <div id="floor-plan-button"><a href="">Select Floor Plan</a></div>
+                                    
+                                    <div id="floor-plans">
+                                        <div class="table">
+                                            <div class="table-row">
+                                                <div class="table-item">
+                                                    <div class="floor-plan-selector" id="plan1">
+                                                        <div class="floor-plan-selector-header">The Meadowood</div>
+                                                        <div class="floor-plan-selector-info">
+                                                            <span>3260 - 3301 Sq. Ft.</span>
+                                                            <span>$553,990</span>
+                                                            <span>2 Stories | 4 Bedrooms | 4 Bath</span>
+                                                            <img class="floor-plan-selector-image" src="img/house.jpg"/>
+                                                            <input type="radio" name="sunwood1" value="sunwood4" id="sunwood4" /><label for="sunwood1" class="floor-plan-selector-button"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="floor-plan-selector" id="plan2">
+                                                        <div class="floor-plan-selector-header">The Meadowood</div>
+                                                        <div class="floor-plan-selector-info">
+                                                            <span>3260 - 3301 Sq. Ft.</span>
+                                                            <span>$553,990</span>
+                                                            <span>2 Stories | 4 Bedrooms | 4 Bath</span>
+                                                            <img class="floor-plan-selector-image" src="img/house.jpg"/>
+                                                            <input type="radio" name="sunwood2" value="sunwood4" id="sunwood4" /><label for="sunwood2" class="floor-plan-selector-button"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="floor-plan-selector" id="plan3">
+                                                        <div class="floor-plan-selector-header">The Meadowood</div>
+                                                        <div class="floor-plan-selector-info">
+                                                            <span>3260 - 3301 Sq. Ft.</span>
+                                                            <span>$553,990</span>
+                                                            <span>2 Stories | 4 Bedrooms | 4 Bath</span>
+                                                            <img class="floor-plan-selector-image" src="img/house.jpg"/>
+                                                            <input type="radio" name="sunwood3" value="sunwood4" id="sunwood4" /><label for="sunwood3" class="floor-plan-selector-button"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="floor-plan-selector" id="plan4">
+                                                        <div class="floor-plan-selector-header">The Meadowood</div>
+                                                        <div class="floor-plan-selector-info">
+                                                            <span>3260 - 3301 Sq. Ft.</span>
+                                                            <span>$553,990</span>
+                                                            <span>2 Stories | 4 Bedrooms | 4 Bath</span>
+                                                            <img class="floor-plan-selector-image" src="img/house.jpg"/>
+                                                            <input type="radio" name="sunwood4" value="sunwood4" id="sunwood4" /><label for="sunwood4" class="floor-plan-selector-button"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="floor-plan-selector" id="plan5">
+                                                        <div class="floor-plan-selector-header">The Meadowood</div>
+                                                        <div class="floor-plan-selector-info">
+                                                            <span>3260 - 3301 Sq. Ft.</span>
+                                                            <span>$553,990</span>
+                                                            <span>2 Stories | 4 Bedrooms | 4 Bath</span>
+                                                            <img class="floor-plan-selector-image" src="img/house.jpg"/>
+                                                            <input type="radio" name="sunwood5" value="sunwood4" id="sunwood4" /><label for="sunwood5" class="floor-plan-selector-button"></label>
+                                                        </div>
+                                                    </div>   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div>
+                                    <div class="info-box">
+                                        <img src="img/house-icon.png"/>
+                                        <p>
+                                            <span id="floor-plan-stories">2</span><br/>
+                                            stories
+                                        </p>
+                                    </div>
+                                    <div class="info-box">
+                                        <img src="img/bedroom-icon.png"/>
+                                        <p>
+                                            <span id="floor-plan-bedrooms">4</span><br/>
+                                            bedrooms
+                                        </p>
+                                    </div>
+                                    <div class="info-box">
+                                        <img src="img/bath-icon.png"/>
+                                        <p>
+                                            <span id="floor-plan-baths">4</span><br/>
+                                            full baths
+                                        </p>
+                                    </div>
+                                    <div class="info-box">
+                                        <img src="img/car-icon.png"/>
+                                        <p>
+                                            <span id="floor-plan-garages">2</span><br/>
+                                            car garage
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-xs-6">
+                    
+                        <!-- Used Home -->
+                    
+                        <div class="box" id="used-homes">
+                            <div id="tag-two" class="box-tag"><div><h2>Used Home</h2></div></div>
+                            <p>Describe the used home you want to compare against</p>
+                            <div class="input-content">
+                                <div class="how-old-years" >
+                                    <fieldset>
+                                        <h3>How old is the home (years)?</h3>
+                                        <input type="radio" name="years" value="5" id="years5" /><label for="years5">5</label>
+                                        <input type="radio" name="years" value="10" id="years10"  /><label for="years10">10</label>
+                                        <input type="radio" name="years" value="20" id="years20" /><label for="years20">20</label>
+                                        <input type="radio" name="years" value="35" id="years35" /><label for="years35">35</label>
+                                        <input type="radio" name="years" value="50" id="years50" /><label for="years50">50+</label>
+                                    </fieldset>
+                                </div>                                                      
+                                <div class="square-footage" >
+                                    <fieldset>
+                                        <h3>Square Footage</h3>
+                                        <input type="radio" name="footage" value="2000" id="footage2000" /><label for="footage2000">2K</label>
+                                        <input type="radio" name="footage" value="2500" id="footage2500"  /><label for="footage2500">2.5K</label>
+                                        <input type="radio" name="footage" value="3000" id="footage3000" /><label for="footage3000">3K</label>
+                                        <input type="radio" name="footage" value="4000" id="footage4000" /><label for="footage4000">4K</label>
+                                        <input type="radio" name="footage" value="5000" id="footage5000" /><label for="footage5000">5K</label>
+                                    </fieldset>
+                                </div>
+                                <h3>Sale Price ($)</h3>
+                                <div id="sale-price-wrapper"><div></div><input name="price" value="" min="100000" max="1000000" step="5000" pattern="[0-9]*" class="sale-price" prefix="$"  /></div>
+                            </div>  
+                        </div>
+                    </div>
+                    
+                </div>  
+                
+                <div class="row">
+                    <div class="col-xs-8">
+
+                        <!-- Your Financials -->        
+                        
+                        <div class="box" id="your-financials">
+                            <div id="tag-three" class="box-tag"><div><h2>Your Financials</h2></div></div>
+                            <p>Describe your expected financing plan</p>
+                            <div class="input-content">
+                                <div id="mortgage-rate" class="slider-container">                                                            
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <h3>Mortgage Rate</h3>
+                                            <!-- pattern="\d*" will show numeric keyboard -->
+                                          <input class="form-control slider-txt" type="text" pattern="\d*" data-inputmask="" precision="2" value=""/><span>%</span>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <div class="slider-input-wrapper">  
+                                                <div></div>
+                                                <span class="slider-value-min">2%</span>
+                                                    <input 
+                                                    class="slider" 
+                                                    type="text"
+                                                    data-slider-min="2" 
+                                                    data-slider-max="8" 
+                                                    data-slider-step=".25" 
+                                                    data-slider-tooltip="show" 
+                                                    data-slider-value="5" 
+                                                    data-slider-precision="2"/>
+                                                <span class="slider-value-max">8%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="mortgage-length" class="slider-container">                                                            
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <h3>Mortgage Length</h3>
+                                            <!-- pattern="\d*" will show numeric keyboard -->
+                                          <input class="form-control slider-txt" type="text" pattern="\d*" data-inputmask="" value=""/><span>YRS</span>
+                                        </div>
+                                        <div class="col-xs-8">
+                                          <div class="slider-input-wrapper"><div></div>
+                                              <span class="slider-value-min">0yrs</span>
+                                              <input class="slider" type="text" data-slider-min="0" data-slider-max="30" data-slider-step="1" data-slider-tooltip="show" data-slider-value="15"/>
+                                              <span class="slider-value-max">30yrs</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="down-payment-percentage" class="slider-container">                                                            
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <div id="down-payment-toggle-wrapper">
+                                                <h3>Down Payment</h3>
+                                                <div id="down-payment-toggle">
+                                                    <a href="" class="percentage active">%</a>
+                                                    <a href="" class="dollars">$</a>
+                                                </div>
+                                                <!-- pattern="\d*" will show numeric keyboard -->
+                                              <input class="form-control slider-txt mort-text" type="text" pattern="\d*" data-inputmask="" value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-8">
+                            <!-- the swap -->
+                                          <div class="slider-input-wrapper percent-alt"><div></div>
+                                            <span id="down-payment-min" class="slider-value-min" data-dollar-value="$10,000" data-percentage-value="0%">0%</span>
+                                                <input id="down-payment-input" class="slider" type="text" data-slider-min="0" data-slider-dollar-min="1000" data-slider-max="100" data-slider-step="1" data-slider-tooltip="" data-slider-value="50"/>
+                                              <span id="down-payment-max" class="slider-value-max down-payment-toggle" data-dollar-value="$100,000" data-percentage-value="100%">100%</span>
+                                          </div>
+                            <!-- the ringer -->
+                                          <div class="slider-input-wrapper alternate"><div></div>
+                                            <span id="down-payment-min" class="slider-value-min">$0</span>
+                                              <input id="down-payment-input2" class="slider showAmount" type="text" data-slider-min="0" data-slider-max="200000" data-slider-step="1000" data-slider-tooltip="show" data-slider-value="50"/>
+                                          
+                                              <span id="down-payment-max" class="slider-value-max down-payment-toggle">$200,000</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+                        
+                            <!-- Submit Input -->   
+
+                            <div id="inputs-submit">            
+                                <input type="button" value="This will be the submit results button" name="" class="results-submit" >
+                            </div>    
+                            
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="modal-cover"></div>
+      </div>    
+      <div id="results-content" class="content-wrapper">
+                 <div class="cost-less-wrapper text-center">
+                     <div class="cost-less-content">
+                         <span>A brand new home actually</span><br/>
+                         <span id="cost-less-large">Costs Less</span><br/>
+                         <span>To own each month</span>
+                     </div>
+                     <div class="cost-more-content">
+                         <span>A brand new home only</span><br/>
+                         <span id="cost-less-large">Costs $XX More</span><br/>
+                         <span>To own each month</span>
+                     </div>
+                 </div>
+                 <div class="monthly-bills-wrapper text-center">
+                    <h2>Total Monthly Bills</h2>
+                     <div id="vs-box">
+                         <div class="row">
+                             <div class="col-xs-6">
+                                <h3>Brand Hew Home</h3>
+                                 <span class="new-home-total-monthly-cost">$2568</span>
+                             </div>     
+                             <div class="col-xs-6">
+                                <h3>Used Home</h3>
+                                 <span class="used-home-total-monthly-cost">$2568</span>
+                             </div>  
+                         </div>                        
+                     </div>
+                     <div class="graph-wrapper">
+                         <div class="graph" id="new-home-graph">
+                             <div class="maintenance bar-section">
+                                 <span class="cost-label">$50</span>
+                             </div>
+                             <div class="energy bar-section">
+                                 <span class="cost-label">$250</span>
+                             </div>
+                             <div class="mortgage bar-section">
+                                 <div id="new-home-helper" class="helper-box">
+                                    <p>A Brand New Home</p>
+                                    <p class="value"><span>90%</span></p>
+                                    <p>of expenses go toward home equity</p>
+                                 </div>
+                                 <span class="cost-label">$1100</span>
+                             </div>
+                             <p>Downpayment = <span class="downpayment">$25,000</span></p>
+                         </div>
+                         <div class="graph" id="used-home-graph">
+                             <div class="maintenance bar-section">
+                                 <span class="cost-label">$350</span>
+                                 <div id="used-home-maintenance-helper" class="helper-box">
+                                    <p>A Used Home</p>
+                                     <p class="value"><span>$294</span> More</p>
+                                     <p>in maintenance each month</p>
+                                 </div>
+                             </div>
+                             <div class="energy bar-section">
+                                 <span class="cost-label">$250</span>
+                                 <div id="used-home-energy-helper" class="helper-box">
+                                    <p>A Used Home</p>
+                                     <p class="value"><span>$317</span> More</p>
+                                     <p>in energy each month</p>
+                                 </div>
+                             </div>
+                             <div class="mortgage bar-section">
+                                 <span class="cost-label">$1200</span>
+                             </div>
+                             <p>Downpayment = <span class="downpayment">$25,000</span></p>
+                         </div>
+                         <div class="graph-legend">
+                             <ul>
+                                 <li class="maintenance">Maintenance<button>?</button></li>
+                                 <li class="energy">Energy<button>?</button></li>
+                                 <li class="mortgage">Mortgage<button>?</button></li>
+                             </ul>                            
+                         </div>
+                     </div>
+                     <div id="send-button">
+                        <button>Send yourself the results</button>
+                     </div>
+                     <div class="modal fade" id="legend-modal">
+                      <div class="modal-dialog">
+                        <div class="modal-content" id="energy-modal">
+                          <div class="modal-header">Energy Header
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body" >
+                              
+                            <p>Energy modal paragraph content<br/>
+                                
+                            </p>
+                          </div>
+                        </div><!-- /.modal-content -->
+                        <div class="modal-content" id="maintenance-modal">
+                          <div class="modal-header">Maintenance Header
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body" >
+                              
+                            <p>Maintenance modal paragraph content<br/>
+                                
+                            </p>
+                          </div>
+                        </div><!-- /.modal-content -->
+                        <div class="modal-content" id="mortgage-modal">
+                          <div class="modal-header">Mortgage Header
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body" >
+                              
+                            <p>Mortgage modal paragraph content<br/>
+                                
+                            </p>
+                          </div>
+                        </div><!-- /.modal-content -->
+                      </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                     <div class="modal fade" id="email-modal">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <p>Please enter your E-MAIL below<br/>
+                                <input type="email" name="email" id="email" autocomplete="off"/>
+                            </p>
+                          </div>
+                          <div class="modal-footer">
+                            <img id="email-submit" src="img/submit-button.png"/>
+                          </div>
+                        </div><!-- /.modal-content -->
+                      </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                 </div>
+      </div>
+    </div>  
+    
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.inputmask.bundle.min.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/resizer.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/results.js"></script>
+
+    <script src="js/numeral.min.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/backbone.js"></script>
+    <script src="js/backbone.linear.js"></script>
+    <script src="js/backbone.epoxy.js"></script>
+    <script src="js/handlebars-v3.0.3.js"></script>
+
+    <script src="js/plans.js"></script>
+    <script src="js/tco.js"></script>
+
+</body>
+</html>
